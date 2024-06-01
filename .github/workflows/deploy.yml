@@ -53,7 +53,7 @@ jobs:
             docker run -d  \
             --restart always \
             --name jaothui-renderer \
-            -p 4444:4444
+            -p 4444:4444 \
             -e notify_key=${{secrets.NOTIFY_KEY}} \
             -e line_uri=${{secrets.LINE_URI}} \
             -e jwt_secret=${{secrets.JWT_SECRET}} \
