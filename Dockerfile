@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:18-alpine
 WORKDIR /jaothui-renderer
 COPY package.json ./
 #  add libraries; sudo so non-root user added downstream can get sudo
