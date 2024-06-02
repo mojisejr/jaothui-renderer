@@ -29,6 +29,11 @@ jobs:
         with:
           push: true
           tags: mojisejr/jaothui-renderer:v1.0
+          build-args: |
+            notify_key=${{secrets.NOTIFY_KEY}}
+            line_uri=${{secrets.LINE_URI}}
+            jwt_secret=${{secrets.JWT_SECRET}}
+            DATABASE_URL=${{secrets.DATABASE_URL}}
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_push
