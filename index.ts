@@ -4,17 +4,16 @@ import express, { Request, Response } from "express";
 import { authenticate } from "./auth/jwt";
 import { renderPedigree } from "./services/renderer.service";
 import { errorNotify } from "./notify/line";
-import cors from "cors";
+import cors, { CorsOptions } from "cors";
 
 const port = 4444;
 
+const corsOption: CorsOptions = {
+  origin: ["https://localhost:3000", "https://jaothui.com"],
+};
+
 const app = express();
-app.use(
-  cors({
-    // origin: "http://localhost:3000",
-    origin: "https://jaothui.com",
-  })
-);
+app.use(cors(corsOption));
 app.get(
   "/certificate/:microchip",
   authenticate,
@@ -30,7 +29,9 @@ app.get(
       const certificate = await renderPedigree(req.params.microchip);
 
       if (certificate == undefined) {
-        await errorNotify(`/certificate/:microchip`);
+        await errorNotify(
+          `/certificate/:microchip: not found data for #${req.params.microchip}`
+        );
         res.status(400).json({
           result: "error",
           message: "not found",

@@ -1,8 +1,17 @@
-import { createCanvas, loadImage, CanvasRenderingContext2D } from "canvas";
+import {
+  createCanvas,
+  loadImage,
+  CanvasRenderingContext2D,
+  registerFont,
+} from "canvas";
 import { pedigreeRenderingConfig } from "../constants/renderer";
 import qrcode from "qrcode-generator";
 import { getMetadataByMicrochipId } from "./metadata.service";
 import { parseThaiDate } from "../helpers/parse-thai-date";
+
+registerFont(`${process.cwd()}/font/Kanit/Kanit-Regular.ttf`, {
+  family: "Kanit",
+});
 
 const renderText = (
   text: string,
@@ -13,7 +22,7 @@ const renderText = (
   color: string = "#000000",
   align: CanvasTextAlign = "center"
 ) => {
-  ctx.font = `${size}px serif bold`;
+  ctx.font = `${size}px Kanit`;
   ctx.fillStyle = `${color}`;
   ctx.textAlign = align;
   ctx.fillText(text, x, y);
@@ -317,11 +326,11 @@ const signatureJobRender = (
 
     lines.push(result.substr(0, j || result.length));
     width = Math.max(width, ctx.measureText(lines[lines.length - 1]).width);
-    text = text.substr(lines[lines.length - 1].length, text.length);
+    text = text.substring(lines[lines.length - 1].length, text.length);
   }
 
   // Calculate canvas size, add margin
-  ctx.font = font + "px Arial";
+  ctx.font = font + "px Kanit";
 
   // Render
   ctx.fillStyle = color;
