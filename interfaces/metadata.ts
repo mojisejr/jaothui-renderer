@@ -1,5 +1,3 @@
-import { Certificate } from "./certification";
-
 export interface Metadata {
   name: string;
   origin: string;
@@ -19,5 +17,5 @@ export interface Metadata {
   relation: { motherTokenId: string; fatherTokenId: string };
   createdAt: bigint;
   updatedAt: bigint;
-  certificate: Certificate;
+  certificate: any;
 }

@@ -1,10 +1,9 @@
 name: Build and Push Docker Image
 
 on:
-  push:
-    branches:
-      - main # หรือชื่อ branch ที่คุณต้องการใช้
-
+  # push:
+  #   branches:
+  #     - main # หรือชื่อ branch ที่คุณต้องการใช้
   workflow_dispatch:
 
 jobs:

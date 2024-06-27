@@ -28,7 +28,7 @@ const renderText = (
   ctx.fillText(text, x, y);
 };
 
-export const renderPedigree = async (microchip: string) => {
+export const renderPedigree = async (microchip: string, tokenId: string) => {
   try {
     const buffaloData = await getMetadataByMicrochipId(microchip);
 
@@ -59,7 +59,10 @@ export const renderPedigree = async (microchip: string) => {
     } = pedigreeRenderingConfig;
 
     const frame = await loadImage(framePath);
-    const buffaloImage = await loadImage(buffaloData?.imageUri!);
+
+    const buffaloImage = await loadImage(
+      `${process.env.base_url}/${tokenId}.jpg`
+    );
     // const testUrl =
     //   "https://wtnqjxerhmdnqszkhbvs.supabase.co/storage/v1/object/public/slipstorage/signatures/0x97584869f231989153d361B7FC64197BdEBA819c.png?t=2024-05-27T15%3A47%3A11.121Z";
     const signature1 = await loadImage(

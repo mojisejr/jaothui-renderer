@@ -15,7 +15,7 @@ const corsOption: CorsOptions = {
 const app = express();
 app.use(cors(corsOption));
 app.get(
-  "/certificate/:microchip",
+  "/certificate/:microchip/:tokenId",
   authenticate,
   async (req: Request, res: Response) => {
     if (req.params.microchip == undefined) {
@@ -26,7 +26,10 @@ app.get(
       });
     }
     try {
-      const certificate = await renderPedigree(req.params.microchip);
+      const certificate = await renderPedigree(
+        req.params.microchip,
+        req.params.tokenId
+      );
 
       if (certificate == undefined) {
         await errorNotify(
@@ -46,7 +49,7 @@ app.get(
         message: null,
       });
     } catch (error: any) {
-      await errorNotify(`/certificate/:microchip`);
+      await errorNotify(`/certificate/:microchip/:tokenId`);
       res.status(400).json({
         result: "error",
         message: error.message,
