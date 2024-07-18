@@ -92,7 +92,9 @@ export const renderPedigree = async (microchip: string, tokenId: string) => {
       imageInfo.height
     );
 
-    const dataurl = qrGenerator(`https://jaothui.com/cert/${microchip}`);
+    const dataurl = qrGenerator(
+      `https://jaothui.com/cert/${microchip}?i=${tokenId}`
+    );
     const qrimg = await loadImage(dataurl);
     ctx.drawImage(qrimg, qrPos.x, qrPos.y, qrPos.width, qrPos.height);
 
