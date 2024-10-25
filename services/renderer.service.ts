@@ -8,6 +8,7 @@ import { pedigreeRenderingConfig } from "../constants/renderer";
 import qrcode from "qrcode-generator";
 import { getMetadataByMicrochipId } from "./metadata.service";
 import { parseThaiDate } from "../helpers/parse-thai-date";
+import { calculateXPositionOfName } from "../helpers/calculate-name-length";
 
 registerFont(`${process.cwd()}/font/Kanit/Kanit-Regular.ttf`, {
   family: "Kanit",
@@ -92,43 +93,59 @@ export const renderPedigree = async (microchip: string, tokenId: string) => {
       imageInfo.height
     );
 
-    const dataurl = qrGenerator(
-      `https://jaothui.com/cert/${microchip}?i=${tokenId}`
-    );
+    //QR CODE
+    const dataurl = qrGenerator(`https://jaothui.com/cert/${microchip}`);
     const qrimg = await loadImage(dataurl);
     ctx.drawImage(qrimg, qrPos.x, qrPos.y, qrPos.width, qrPos.height);
 
+    //CERTIFICATION NO
     renderText(
       `${buffaloData?.certificate.no}/${buffaloData?.certificate.year}`,
       ctx,
       noPos.x,
       noPos.y
     );
+    //BUFFALO NAME
     renderText(buffaloData?.name!, ctx, buffNamePos.x, buffNamePos.y);
+    //BUFFALO MICROCHIP
     renderText(
       buffaloData?.certify.microchip!,
       ctx,
       microchipPos.x,
       microchipPos.y
     );
+    //BUFFALO BIRTHDATE
     const birthdate = parseThaiDate(buffaloData?.birthdate! * 1000);
     renderText(birthdate.date as string, ctx, bDayPos.x, bDayPos.y);
     renderText(birthdate.thaiMonth, ctx, bMonthPos.x, bMonthPos.y);
     renderText(birthdate.thaiYear as string, ctx, bYearPos.x, bYearPos.y);
+
+    //BUFFALO COLOR
     renderText(
       buffaloData?.color! == "Albino" ? "เผือก" : "ดำ",
       ctx,
       colorPos.x,
       colorPos.y
     );
+
+    //BUFFALO SEX
     renderText(
       buffaloData?.sex! == "Male" ? "ผู้" : "เมีย",
       ctx,
       sexPos.x,
       sexPos.y
     );
-    renderText(buffaloData?.certificate.ownerName!, ctx, namePos.x, namePos.y);
+
+    //BUFFALO OWNER NAME
+    const name = buffaloData?.certificate.ownerName!;
+    const calcXPos = calculateXPositionOfName(name);
+
+    renderText(buffaloData?.certificate.ownerName!, ctx, calcXPos, namePos.y);
+
+    //BUFFALO BORN AT
     renderText(buffaloData?.certificate.bornAt!, ctx, bornAtPos.x, bornAtPos.y);
+
+    //BUFFALO's FATHER
     renderText(
       buffaloData?.certificate.dadId == undefined
         ? ""
@@ -137,6 +154,8 @@ export const renderPedigree = async (microchip: string, tokenId: string) => {
       dadPos.x,
       dadPos.y
     );
+
+    //BUFFALO's MOTHER
     renderText(
       buffaloData?.certificate.momId == undefined
         ? ""
@@ -145,6 +164,8 @@ export const renderPedigree = async (microchip: string, tokenId: string) => {
       momPos.x,
       momPos.y
     );
+
+    //BUFFALO's fGRANDDAD
     renderText(
       buffaloData?.certificate.fGranDadId == undefined
         ? ""
@@ -155,6 +176,8 @@ export const renderPedigree = async (microchip: string, tokenId: string) => {
       dGrandPaPos.x,
       dGrandPaPos.y
     );
+
+    //BUFFALO's fGRANDMOM
     renderText(
       buffaloData?.certificate.fGrandMomId == undefined
         ? ""
@@ -168,6 +191,8 @@ export const renderPedigree = async (microchip: string, tokenId: string) => {
       dGrandMaPos.x,
       dGrandMaPos.y
     );
+
+    //BUFFALO's mGRANDDAD
     renderText(
       buffaloData?.certificate.mGrandDadId == undefined
         ? ""
@@ -181,6 +206,8 @@ export const renderPedigree = async (microchip: string, tokenId: string) => {
       mGrandPaPos.x,
       mGrandPaPos.y
     );
+
+    //BUFFALO's mGRANDMOM
     renderText(
       buffaloData?.certificate.mGrandMomId == undefined
         ? ""
@@ -194,6 +221,8 @@ export const renderPedigree = async (microchip: string, tokenId: string) => {
       mGrandMaPos.x,
       mGrandMaPos.y
     );
+
+    //Signature 1
     ctx.drawImage(
       signature1,
       signatureImgPos.pos[0].x,
@@ -201,6 +230,8 @@ export const renderPedigree = async (microchip: string, tokenId: string) => {
       signatureImgPos.width,
       signatureImgPos.height
     );
+
+    //Signature 2
     ctx.drawImage(
       signature2,
       signatureImgPos.pos[1].x,
@@ -208,6 +239,8 @@ export const renderPedigree = async (microchip: string, tokenId: string) => {
       signatureImgPos.width,
       signatureImgPos.height
     );
+
+    //Signature 3
     ctx.drawImage(
       signature3,
       signatureImgPos.pos[2].x,
