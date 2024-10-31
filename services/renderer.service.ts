@@ -139,8 +139,15 @@ export const renderPedigree = async (microchip: string, tokenId: string) => {
     //BUFFALO OWNER NAME
     const name = buffaloData?.certificate.ownerName!;
     const calcXPos = calculateXPositionOfName(name);
+    const nameSize = name.length > 60 ? 12 : 14;
 
-    renderText(buffaloData?.certificate.ownerName!, ctx, calcXPos, namePos.y);
+    renderText(
+      buffaloData?.certificate.ownerName!,
+      ctx,
+      calcXPos,
+      namePos.y,
+      nameSize
+    );
 
     //BUFFALO BORN AT
     renderText(buffaloData?.certificate.bornAt!, ctx, bornAtPos.x, bornAtPos.y);

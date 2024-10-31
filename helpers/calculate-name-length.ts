@@ -1,9 +1,9 @@
 export const calculateXPositionOfName = (name: string) => {
   const minLength = 30;
-  const maxLength = 70;
+  const maxLength = 100;
 
-  const minX = 350;
-  const maxX = 550;
+  let minX = 350;
+  let maxX = 550;
 
   if (name.length <= minLength) return minX;
   if (name.length >= maxLength) return maxLength;
